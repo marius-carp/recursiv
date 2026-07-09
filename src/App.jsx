@@ -69,7 +69,7 @@ function App() {
   // Cap totalQuestions when layout mode changes
   useEffect(() => {
     const maxQuestionsForLayout = {
-      full: 38,
+      full: 40,
       half: 20,
       quarter: 10,
     };

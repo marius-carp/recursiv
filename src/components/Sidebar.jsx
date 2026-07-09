@@ -107,12 +107,12 @@ function Sidebar({
           <input
             type="range"
             min="5"
-            max={layoutMode === 'full' ? 38 : layoutMode === 'half' ? 20 : 10}
+            max={layoutMode === 'full' ? 40 : layoutMode === 'half' ? 20 : 10}
             value={totalQuestions}
             onChange={(e) => setTotalQuestions(parseInt(e.target.value))}
             className="w-full h-2 bg-surface-container-high rounded-lg appearance-none cursor-pointer slider"
             style={{
-              background: `linear-gradient(to right, #0078d4 0%, #0078d4 ${((totalQuestions - 5) / ((layoutMode === 'full' ? 38 : layoutMode === 'half' ? 20 : 10) - 5)) * 100}%, #ebe7e5 ${((totalQuestions - 5) / ((layoutMode === 'full' ? 38 : layoutMode === 'half' ? 20 : 10) - 5)) * 100}%, #ebe7e5 100%)`
+              background: `linear-gradient(to right, #0078d4 0%, #0078d4 ${((totalQuestions - 5) / ((layoutMode === 'full' ? 40 : layoutMode === 'half' ? 20 : 10) - 5)) * 100}%, #ebe7e5 ${((totalQuestions - 5) / ((layoutMode === 'full' ? 38 : layoutMode === 'half' ? 20 : 10) - 5)) * 100}%, #ebe7e5 100%)`
             }}
           />
         </div>

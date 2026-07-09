@@ -87,7 +87,12 @@ The `layoutMode` prop controls:
 
 ### Print Margins
 
-Worksheets use 1-inch margins on all sides (`padding: '1in'`) and are sized for US Letter (8.5" × 11").
+Worksheets are sized for US Letter (8.5" × 11") with dynamic padding:
+- **Full layout**: 0.5in top, 1in right/bottom/left
+- **Half layout**: 0.5in top, 1in right/bottom/left  
+- **Quarter layout**: 1in on all sides
+
+The reduced top padding for full/half layouts ensures all questions fit within a single printed page.
 
 ### State Dependencies
 

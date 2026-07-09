@@ -4,7 +4,7 @@ function WorksheetPreview({ questions, title, includeNameDate, layoutMode }) {
     const maxQuestions = layoutMode === 'full' ? questions.length : layoutMode === 'half' ? 20 : 10;
     const displayQuestions = questions.slice(0, maxQuestions);
 
-    const questionsPerColumn = layoutMode === 'full' ? 19 : layoutMode === 'half' ? 10 : 10;
+    const questionsPerColumn = layoutMode === 'full' ? 20 : layoutMode === 'half' ? 10 : 10;
     const columns = layoutMode === 'full' ? 2 : layoutMode === 'half' ? 2 : 2;
 
     return (
@@ -16,7 +16,7 @@ function WorksheetPreview({ questions, title, includeNameDate, layoutMode }) {
         style={{
           width: layoutMode === 'full' ? '8.5in' : '8.5in',
           minHeight: layoutMode === 'full' ? '11in' : '11in',
-          padding: '1in',
+          padding: layoutMode === 'full' ? '0.5in 1in 1in 1in' : layoutMode === 'half' ? '0.5in 1in 1in 1in' : '1in',
         }}
       >
         {/* Header Section - Only for full layout */}
