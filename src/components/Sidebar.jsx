@@ -1,3 +1,5 @@
+import { useState, useEffect } from 'react';
+
 function Sidebar({
   operations,
   setOperations,
@@ -13,6 +15,26 @@ function Sidebar({
   setIncludeNameDate,
   onGenerate,
 }) {
+  const [minInput, setMinInput] = useState(String(range.min));
+  const [maxInput, setMaxInput] = useState(String(range.max));
+
+  useEffect(() => { setMinInput(String(range.min)); }, [range.min]);
+  useEffect(() => { setMaxInput(String(range.max)); }, [range.max]);
+
+  const handleMinChange = (e) => {
+    const raw = e.target.value;
+    setMinInput(raw);
+    const parsed = parseInt(raw, 10);
+    if (!isNaN(parsed)) setRange({ ...range, min: parsed });
+  };
+
+  const handleMaxChange = (e) => {
+    const raw = e.target.value;
+    setMaxInput(raw);
+    const parsed = parseInt(raw, 10);
+    if (!isNaN(parsed)) setRange({ ...range, max: parsed });
+  };
+
   const toggleOperation = (op) => {
     if (operations.includes(op)) {
       setOperations(operations.filter((o) => o !== op));
@@ -28,6 +50,8 @@ function Sidebar({
   const resetDefaults = () => {
     setOperations(['+']);
     setRange({ min: 0, max: 30 });
+    setMinInput('0');
+    setMaxInput('30');
     setTotalQuestions(20);
     setLayoutMode('full');
     setTitle('Friday Math Quiz');
@@ -81,8 +105,8 @@ function Sidebar({
               <label className="block text-xs text-on-surface-variant mb-1">From</label>
               <input
                 type="number"
-                value={range.min}
-                onChange={(e) => setRange({ ...range, min: parseInt(e.target.value) || 0 })}
+                value={minInput}
+                onChange={handleMinChange}
                 className="w-full px-3 py-2 border border-outline-variant rounded bg-white text-on-surface focus:outline-none focus:border-primary-container focus:ring-2 focus:ring-primary-container/20"
               />
             </div>
@@ -90,8 +114,8 @@ function Sidebar({
               <label className="block text-xs text-on-surface-variant mb-1">To</label>
               <input
                 type="number"
-                value={range.max}
-                onChange={(e) => setRange({ ...range, max: parseInt(e.target.value) || 0 })}
+                value={maxInput}
+                onChange={handleMaxChange}
                 className="w-full px-3 py-2 border border-outline-variant rounded bg-white text-on-surface focus:outline-none focus:border-primary-container focus:ring-2 focus:ring-primary-container/20"
               />
             </div>
