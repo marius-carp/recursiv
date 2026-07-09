@@ -1,0 +1,74 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Source+Serif+4:wght@400;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply m-0 font-inter text-on-surface bg-surface antialiased;
+  }
+}
+
+@layer components {
+  /* Custom Slider Styles */
+  input[type="range"].slider {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 8px;
+    outline: none;
+  }
+
+  input[type="range"].slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #0078d4;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  input[type="range"].slider::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #0078d4;
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  /* Custom Checkbox Styles */
+  input[type="checkbox"] {
+    accent-color: #0078d4;
+  }
+}
+
+@layer utilities {
+  @media print {
+    html, body {
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+
+    .print-hidden {
+      display: none !important;
+    }
+
+    .print-visible {
+      display: block !important;
+    }
+
+    .print-page-break {
+      page-break-before: always;
+      break-before: page;
+    }
+
+    @page {
+      margin: 0;
+      size: letter;
+    }
+  }
+}
