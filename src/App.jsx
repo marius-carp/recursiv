@@ -5,7 +5,7 @@ import WorksheetPreview from './components/WorksheetPreview';
 function App() {
   const [operations, setOperations] = useState(['+']);
   const [range, setRange] = useState({ min: 0, max: 30 });
-  const [totalQuestions, setTotalQuestions] = useState(20);
+  const [totalQuestions, setTotalQuestions] = useState(10);
   const [layoutMode, setLayoutMode] = useState('full');
   const [title, setTitle] = useState('Friday Math Quiz');
   const [includeNameDate, setIncludeNameDate] = useState(true);
@@ -65,6 +65,19 @@ function App() {
     }
     setQuestions(newQuestions);
   };
+
+  // Cap totalQuestions when layout mode changes
+  useEffect(() => {
+    const maxQuestionsForLayout = {
+      full: 38,
+      half: 20,
+      quarter: 10,
+    };
+    const maxAllowed = maxQuestionsForLayout[layoutMode];
+    if (totalQuestions > maxAllowed) {
+      setTotalQuestions(maxAllowed);
+    }
+  }, [layoutMode]);
 
   useEffect(() => {
     generateQuestions();

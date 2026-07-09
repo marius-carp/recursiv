@@ -1,6 +1,10 @@
 function WorksheetPreview({ questions, title, includeNameDate, layoutMode }) {
   const renderWorksheet = (showAnswers = false, key = '') => {
-    const questionsPerColumn = layoutMode === 'full' ? 10 : layoutMode === 'half' ? 5 : 3;
+    // Cap questions based on layout mode
+    const maxQuestions = layoutMode === 'full' ? questions.length : layoutMode === 'half' ? 20 : 10;
+    const displayQuestions = questions.slice(0, maxQuestions);
+
+    const questionsPerColumn = layoutMode === 'full' ? 19 : layoutMode === 'half' ? 10 : 10;
     const columns = layoutMode === 'full' ? 2 : layoutMode === 'half' ? 2 : 2;
 
     return (
@@ -15,32 +19,34 @@ function WorksheetPreview({ questions, title, includeNameDate, layoutMode }) {
           padding: '1in',
         }}
       >
-        {/* Header Section */}
-        <div className="mb-8">
-          <div className="flex justify-between items-start">
-            <h1 className="font-serif text-3xl font-bold text-on-surface mb-4">{title}</h1>
-            {includeNameDate && (
-              <div className="flex flex-col gap-2 min-w-[250px]">
-                <div className="flex items-center gap-2">
-                  <span className="text-sm font-serif">Name:</span>
-                  <div className="flex-1 border-b border-on-surface"></div>
+        {/* Header Section - Only for full layout */}
+        {layoutMode === 'full' && (
+          <div className="mb-8">
+            <div className="flex justify-between items-start">
+              <h1 className="font-serif text-3xl font-bold text-on-surface mb-4">{title}</h1>
+              {includeNameDate && (
+                <div className="flex flex-col gap-2 min-w-[250px]">
+                  <div className="flex items-end gap-2">
+                    <span className="text-sm font-serif">Name:</span>
+                    <div className="flex-1 border-b border-on-surface"></div>
+                  </div>
+                  <div className="flex items-end gap-2">
+                    <span className="text-sm font-serif">Date:</span>
+                    <div className="flex-1 border-b border-on-surface"></div>
+                  </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-sm font-serif">Date:</span>
-                  <div className="flex-1 border-b border-on-surface"></div>
-                </div>
-              </div>
-            )}
+              )}
+            </div>
+            <div className="h-px bg-on-surface mt-2"></div>
           </div>
-          <div className="h-px bg-on-surface mt-2"></div>
-        </div>
+        )}
 
         {/* Questions Section */}
         {layoutMode === 'full' && (
           <div className="grid grid-cols-2 gap-x-12">
             {Array.from({ length: columns }).map((_, colIndex) => (
               <div key={colIndex} className="space-y-4">
-                {questions
+                {displayQuestions
                   .slice(colIndex * questionsPerColumn, (colIndex + 1) * questionsPerColumn)
                   .map((q, idx) => (
                     <div key={idx} className="flex items-center gap-3">
@@ -65,23 +71,37 @@ function WorksheetPreview({ questions, title, includeNameDate, layoutMode }) {
         {layoutMode === 'half' && (
           <div className="grid grid-cols-1 gap-8">
             {[0, 1].map((section) => (
-              <div key={section} className="border-2 border-dashed border-outline-variant p-4">
-                <div className="grid grid-cols-2 gap-x-8">
+              <div key={section} className="border-2 border-dashed border-outline-variant p-4 relative">
+                {/* Header for each half section */}
+                <div className="mb-6">
+                  <div className="flex justify-between items-start">
+                    <h1 className="font-serif text-2xl font-bold text-on-surface mb-3">{title}</h1>
+                    {includeNameDate && (
+                      <div className="flex flex-col gap-2 min-w-[200px]">
+                        <div className="flex items-end gap-2">
+                          <span className="text-xs font-serif">Name:</span>
+                          <div className="flex-1 border-b border-on-surface"></div>
+                        </div>
+                        <div className="flex items-end gap-2">
+                          <span className="text-xs font-serif">Date:</span>
+                          <div className="flex-1 border-b border-on-surface"></div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  <div className="h-px bg-on-surface mt-2"></div>
+                </div>
+
+                {/* Questions in 2 columns */}
+                <div className="grid grid-cols-2 gap-x-8 relative">
                   {Array.from({ length: columns }).map((_, colIndex) => (
                     <div key={colIndex} className="space-y-3">
-                      {questions
-                        .slice(
-                          section * (questionsPerColumn * 2) + colIndex * questionsPerColumn,
-                          section * (questionsPerColumn * 2) + (colIndex + 1) * questionsPerColumn
-                        )
+                      {displayQuestions
+                        .slice(colIndex * questionsPerColumn, (colIndex + 1) * questionsPerColumn)
                         .map((q, idx) => (
                           <div key={idx} className="flex items-center gap-2">
                             <span className="text-xs text-on-surface-variant font-serif min-w-[16px]">
-                              {section * (questionsPerColumn * 2) +
-                                colIndex * questionsPerColumn +
-                                idx +
-                                1}
-                              .
+                              {colIndex * questionsPerColumn + idx + 1}.
                             </span>
                             <span className="font-serif text-base">
                               {q.text}{' '}
@@ -96,6 +116,11 @@ function WorksheetPreview({ questions, title, includeNameDate, layoutMode }) {
                     </div>
                   ))}
                 </div>
+
+                {/* Watermark for each half section */}
+                <div className="absolute bottom-2 right-2 text-[10px] text-on-surface-variant font-serif">
+                  Generated by Recursiv
+                </div>
               </div>
             ))}
           </div>
@@ -104,12 +129,33 @@ function WorksheetPreview({ questions, title, includeNameDate, layoutMode }) {
         {layoutMode === 'quarter' && (
           <div className="grid grid-cols-2 gap-4">
             {[0, 1, 2, 3].map((section) => (
-              <div key={section} className="border-2 border-dashed border-outline-variant p-3">
+              <div key={section} className="border-2 border-dashed border-outline-variant p-3 relative">
+                {/* Header for each quarter section */}
+                <div className="mb-4">
+                  <div className="flex justify-between items-start">
+                    <h1 className="font-serif text-xl font-bold text-on-surface mb-2">{title}</h1>
+                    {includeNameDate && (
+                      <div className="flex flex-col gap-1 min-w-[120px]">
+                        <div className="flex items-end gap-1">
+                          <span className="text-[10px] font-serif">Name:</span>
+                          <div className="flex-1 border-b border-on-surface"></div>
+                        </div>
+                        <div className="flex items-end gap-1">
+                          <span className="text-[10px] font-serif">Date:</span>
+                          <div className="flex-1 border-b border-on-surface"></div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  <div className="h-px bg-on-surface mt-1"></div>
+                </div>
+
+                {/* Questions in single column */}
                 <div className="space-y-2">
-                  {questions.slice(section * questionsPerColumn, (section + 1) * questionsPerColumn).map((q, idx) => (
+                  {displayQuestions.map((q, idx) => (
                     <div key={idx} className="flex items-center gap-2">
                       <span className="text-xs text-on-surface-variant font-serif min-w-[14px]">
-                        {section * questionsPerColumn + idx + 1}.
+                        {idx + 1}.
                       </span>
                       <span className="font-serif text-sm">
                         {q.text}{' '}
@@ -122,15 +168,22 @@ function WorksheetPreview({ questions, title, includeNameDate, layoutMode }) {
                     </div>
                   ))}
                 </div>
+
+                {/* Watermark for each quarter section */}
+                <div className="absolute bottom-1 right-1 text-[8px] text-on-surface-variant font-serif">
+                  Generated by Recursiv
+                </div>
               </div>
             ))}
           </div>
         )}
 
-        {/* Footer */}
-        <div className="absolute bottom-4 right-8 text-xs text-on-surface-variant font-serif">
-          Generated by Recursiv
-        </div>
+        {/* Footer - Only for full layout */}
+        {layoutMode === 'full' && (
+          <div className="absolute bottom-4 right-8 text-xs text-on-surface-variant font-serif">
+            Generated by Recursiv
+          </div>
+        )}
       </div>
     );
   };
